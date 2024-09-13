@@ -1,7 +1,5 @@
 from termcolor import colored
 
-
-
 def MakeTable():
     HASH_TABLE = {}
     secondCounter = 0
@@ -83,8 +81,6 @@ def MarkSpot(spot:str, sector):
     if HASH_TABLE[spot] == " ":
         if SpotToSector(spot) != sector and sector != -5:
             return False
-        if boardsWon[SpotToSector(spot)] != ' ':
-            return False
         HASH_TABLE[spot] = PLAYER_TYPE
 
         return True
@@ -135,22 +131,62 @@ def GetNextSector(input:str):
     sector = numbValue*3+letterValue
     return sector
 
+def SectorToSpots(sector:int):
+    LETTER_LIST = ["a", "b", "c", "d", "e", "f", "g", "h", "i"]
+    m2 = LETTER_LIST[sector%3*3:sector%3*3+3]
+    m1 = [f'{i+1}'for i in range(int(sector/3)*3,int(sector/3)*3+3)]
+    return [f'{HASH_TABLE[m1[i] + m2[j]]}' for i in range(3) for j in range(3)]
+
+def CheckSectorWin(sector):
+    return CheckBoardWin(SectorToSpots(sector))
+
+def CheckBoardWin(board):
+    for i in range(3):
+         result = CheckRowWin(board[3*i:3*i+3]) or CheckRowWin(board[i::3]) or CheckRowWin(board[::4]) or CheckRowWin(board[2:7:2])
+         if result:
+             return result
+    return False
+
+def CheckRowWin(row):
+    if row[0] == ' ':
+        return False
+    if row[0] == row[1] and row[0] == row[2]:
+        return True, row[0]
+    else:
+        return False
+
+def IsSectorMaxed(sector):
+    for a in SectorToSpots(sector):
+        if a == ' ':
+            return False
+    return True
+
 # execute the random code as pleased
 #PrintBoard() # Depricated and old version
 #HASH_TABLE = MakeTable() # It has been moved up in the stack to make the printboard function loadle and doable
-boardsWon = []
-for _ in range(9):
-    boardsWon.append(' ')
+boardsWon = [' ' for _ in range(9)]
 
 # GameLoop
 PLAYER_TYPE = "X"
 sectorToColor = -5
+winner = ' '
 while True:
     #print(chr(27) + "[2J") # Clears terminal
     PrintBoardV2(sectorToColor)
     spot = GetAnswer(sectorToColor)
     sectorToColor = GetNextSector(spot)
-    if boardsWon[sectorToColor] !=  ' ':
+
+    # Checking small board for win
+    curSector = SpotToSector(spot)
+    scanResult = CheckSectorWin(curSector)
+    if scanResult:
+        boardsWon[curSector] = scanResult[1]
+        newScanResult = CheckBoardWin(boardsWon)
+        if newScanResult:
+            winner = newScanResult[1]
+            break
+    
+    if IsSectorMaxed(sectorToColor):
         sectorToColor = -5
 
     # Changes current player at end of turn to allow next player
@@ -159,4 +195,6 @@ while True:
     else:
         PLAYER_TYPE = "X"
 
-#print("kys")
+print(f"Player {winner} has won")
+
+print("now kys")

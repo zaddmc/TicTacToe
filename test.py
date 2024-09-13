@@ -1,6 +1,8 @@
-temp = []
+hash = {
+    'a' : '1',
+    'b' : '2',
+    'c' : '3',
+}
 
-for i in range(9):
-    temp.append('')
 
-print(input('123'))
+print(hash[('a','b')])
