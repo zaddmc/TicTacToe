@@ -425,13 +425,13 @@ while True:
     else:
         print(f"'{playerCount_int}' is out of bounds \n Try again")
 
+gameDifficulty = 'r'
 if playerCount_int == 1:
     print("What difficulty do you want to play against")
     if gameType == 'u' or gameType == 'ult':
         print("WARNING, the impossible mode takes forever to take actions")
     print("Random: r")
     print("Impossible: i")
-    
     while True:
         gameDifficulty = input()
         if gameDifficulty == 'r' or gameDifficulty == 'i':
@@ -447,8 +447,9 @@ score = {
 }
 player1_type = 'X'
 while True:
-
+    
     if gameType == 'u' or gameType == 'ult':
+        print("To make a move lineup a letter and number like: '5e' or 'e5', which are equivalent")
         result = StartUltimateTicTacToe(playerCount_int, gameDifficulty, player1_type)
     elif gameType == 'd' or gameType == 'def':
         result = StartDefaultTicTacToe(playerCount_int, gameDifficulty, player1_type)
@@ -462,6 +463,7 @@ while True:
         
     print()
     print(score)
+    print("Player roles have now switched")
 
     if player1_type == "X":
         player1_type = "O"
