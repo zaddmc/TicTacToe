@@ -1,3 +1,13 @@
+"""
+If it does not compile, it is most likely due to "termcolor" which can be installed with pip:
+
+pip install termcolor
+
+If it doesnt recognize the pip command, you need to modify your installation to put python on the PATH, search the google if unsure
+If the ultimate version looks like a hot mess it is likely because it is not run in an bash terminal, to fix this run it in vscode's terminal
+"""
+
+
 from termcolor import colored
 import random
 
